@@ -94,198 +94,142 @@ class _ProfileScreenState extends State<ProfileScreen>
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            // Modern App Bar with gradient
-            SliverAppBar(
-              expandedHeight: 220,
-              floating: false,
-              pinned: true,
-              automaticallyImplyLeading: false,
-              backgroundColor: AppTheme.primaryColor,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppTheme.primaryColor, Color(0xFFFF8C42)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Modern Header with gradient
+              Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppTheme.primaryColor, Color(0xFFFF8C42)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  child: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
+                ),
+                child: Column(
+                  children: [
+                    // App bar with logout button
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () => _showLogoutDialog(context),
+                            icon: const Icon(Icons.logout, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Profile Picture with edit button
+                    Stack(
+                      alignment: Alignment.bottomRight,
                       children: [
-                        const SizedBox(height: 16),
-                        // Profile Picture with edit button
-                        Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            Hero(
-                              tag: 'profile_picture',
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white, width: 4),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 5),
-                                    ),
-                                  ],
+                        Hero(
+                          tag: 'profile_picture',
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 4),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 5),
                                 ),
-                                child: ClipOval(
-                                  child: _buildProfileImage(user?.profilePicture),
-                                ),
-                              ),
+                              ],
                             ),
-                            Positioned(
-                              bottom: 4,
-                              right: 4,
-                              child: GestureDetector(
-                                onTap: () => _showEditProfileDialog(context, showPhotoOption: true),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.15),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
+                            child: ClipOval(
+                              child: _buildProfileImage(user?.profilePicture),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 4,
+                          right: 4,
+                          child: GestureDetector(
+                            onTap: () => _showEditProfileDialog(
+                              context,
+                              showPhotoOption: true,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.15),
+                                    blurRadius: 4,
                                   ),
-                                  padding: const EdgeInsets.all(6),
-                                  child: const Icon(Icons.edit, size: 20, color: AppTheme.primaryColor),
-                                ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.all(6),
+                              child: const Icon(
+                                Icons.edit,
+                                size: 20,
+                                color: AppTheme.primaryColor,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          user?.fullName ?? user?.username ?? 'User',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
                           ),
                         ),
-                        if (user?.email != null)
-                          Text(
-                            user!.email,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white.withOpacity(0.9),
-                            ),
-                          ),
                       ],
                     ),
-                  ),
-                ),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () => _showLogoutDialog(context),
-                  icon: const Icon(Icons.logout, color: Colors.white),
-                ),
-              ],
-            ),
-            // Content: langsung informasi personal
-            SliverPadding(
-              padding: const EdgeInsets.all(16),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: SlideTransition(
-                      position: _slideAnimation,
-                      child: _buildProfileInfo(user),
+                    const SizedBox(height: 12),
+                    Text(
+                      user?.fullName ?? user?.username ?? 'User',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  _buildAccountSettings(context),
-                  const SizedBox(height: 24),
-                ]),
+                    if (user?.email != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          user!.email,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white.withOpacity(0.9),
+                          ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildQuickActions(BuildContext context, AuthProvider auth) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildQuickActionButton(
-              icon: Icons.edit,
-              label: 'Edit Profile',
-              color: AppTheme.primaryColor,
-              onTap: () => _showEditProfileDialog(context),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: _buildQuickActionButton(
-              icon: Icons.photo_camera,
-              label: 'Change Photo',
-              color: Colors.blue,
-              onTap: () => _showChangePhotoDialog(context),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickActionButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 24),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: color,
+              // Content Section
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: SlideTransition(
+                        position: _slideAnimation,
+                        child: _buildProfileInfo(user),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    _buildCourseReflection(context),
+                    const SizedBox(
+                      height: 100,
+                    ), // Extra space for bottom navigation
+                  ],
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -347,7 +291,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-  Widget _buildAccountSettings(BuildContext context) {
+  Widget _buildCourseReflection(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -361,50 +305,198 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(20),
-            child: Text(
-              'Pengaturan Aplikasi',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textDark,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.school_outlined,
+                    color: AppTheme.primaryColor,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Text(
+                  'Refleksi Mata Kuliah',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.textDark,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            // Course Info
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey[50],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey[200]!),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.book_outlined,
+                        color: AppTheme.primaryColor,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          'Pemrograman Aplikasi Mobile',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.textDark,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.person_outlined,
+                        color: Colors.grey,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          'Dosen: Bagus Muhammad Akbar, S.S.T., M.Kom',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ),
-          _buildActionItem(
-            icon: Icons.notifications_outlined,
-            title: 'Notifikasi',
-            subtitle: 'Kelola notifikasi aplikasi',
-            onTap: () => _showNotificationSettings(context),
-          ),
-          _buildActionItem(
-            icon: Icons.language_outlined,
-            title: 'Bahasa',
-            subtitle: 'Indonesia',
-            onTap: () => _showLanguageSettings(context),
-          ),
-          _buildActionItem(
-            icon: Icons.help_outline,
-            title: 'Bantuan & Dukungan',
-            subtitle: 'FAQ dan hubungi kami',
-            onTap: () => _showHelpScreen(context),
-          ),
-          _buildActionItem(
-            icon: Icons.info_outline,
-            title: 'Tentang Aplikasi',
-            subtitle: 'Versi 1.0.0',
-            onTap: () => _showAboutDialog(context),
-            isLast: true,
-          ),
-        ],
+
+            const SizedBox(height: 16),
+
+            // Reflection Content
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppTheme.primaryColor.withOpacity(0.05),
+                    Colors.white,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppTheme.primaryColor.withOpacity(0.2),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.lightbulb_outline,
+                        color: AppTheme.primaryColor,
+                        size: 20,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        'Saran & Kesan',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textDark,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    '📱 Mata kuliah Pemrograman Aplikasi Mobile memberikan pengalaman yang sangat berharga dalam mengembangkan aplikasi menggunakan Flutter.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      height: 1.5,
+                      color: AppTheme.textDark,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    '🎯 Kesan: Pembelajaran yang sangat praktis, memungkinkan mahasiswa untuk langsung mengimplementasikan konsep ke dalam aplikasi nyata banget.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      height: 1.5,
+                      color: AppTheme.textDark,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    '💡 Saran: Boleh mengajarkan mahasiswa dari konsep dasar hingga mahir (10-100), bukan langsung ke level advanced (100-1000). Hal ini akan membantu mahasiswa memahami fondasi awal yang kuat sebelum mempelajari fitur-fitur kompleks.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      height: 1.5,
+                      color: AppTheme.textDark,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: AppTheme.primaryColor,
+                          size: 16,
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Terima kasih atas bimbingannya Bapak Bagus :)',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: AppTheme.primaryColor,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            textAlign: TextAlign.justify,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
-
 
   Widget _buildInfoItem({
     required IconData icon,
@@ -460,73 +552,10 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-  Widget _buildActionItem({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-    bool isLast = false,
-    Color? color,
+  void _showEditProfileDialog(
+    BuildContext context, {
+    bool showPhotoOption = false,
   }) {
-    final itemColor = color ?? AppTheme.textDark;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        decoration: BoxDecoration(
-          border: isLast
-              ? null
-              : Border(bottom: BorderSide(color: Colors.grey.withOpacity(0.1))),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: itemColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(icon, size: 20, color: itemColor),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: itemColor,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: itemColor.withOpacity(0.7),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(
-              Icons.chevron_right,
-              color: Colors.grey.withOpacity(0.5),
-              size: 20,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showEditProfileDialog(BuildContext context, {bool showPhotoOption = false}) {
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final user = auth.currentUser;
     final nameController = TextEditingController(text: user?.fullName ?? '');
@@ -881,67 +910,6 @@ class _ProfileScreenState extends State<ProfileScreen>
     }
   }
 
-  void _showDeleteAccountDialog(BuildContext context, AuthProvider auth) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Hapus Akun',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-        ),
-        content: const Text(
-          'Apakah Anda yakin ingin menghapus akun? Tindakan ini tidak dapat dibatalkan dan semua data Anda akan hilang.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final success = await auth.deleteAccount();
-
-              if (mounted) {
-                if (success) {
-                  final cartProvider = Provider.of<CartProvider>(
-                    context,
-                    listen: false,
-                  );
-                  cartProvider.userId = null;
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
-                    ),
-                    (route) => false,
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(auth.error ?? 'Gagal menghapus akun'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text(
-              'Hapus Akun',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -979,80 +947,6 @@ class _ProfileScreenState extends State<ProfileScreen>
               ),
             ),
             child: const Text('Logout', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showNotificationSettings(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Pengaturan Notifikasi'),
-        content: const Text(
-          'Fitur pengaturan notifikasi akan segera tersedia.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showLanguageSettings(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Pengaturan Bahasa'),
-        content: const Text('Fitur pengaturan bahasa akan segera tersedia.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showHelpScreen(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Bantuan & Dukungan'),
-        content: const Text(
-          'Untuk bantuan, hubungi kami di:\nEmail: support@tokokue.com\nTelepon: +62 123 456 789',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showAboutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Tentang Aplikasi'),
-        content: const Text(
-          'Toko Kue App\nVersi 1.0.0\n\nAplikasi toko kue modern dengan fitur lengkap untuk belanja kue online.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
           ),
         ],
       ),

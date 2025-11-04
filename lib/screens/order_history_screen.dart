@@ -247,19 +247,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                 ),
                 child: Row(
                   children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppTheme.primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(
-                        Icons.cake,
-                        color: AppTheme.primaryColor,
-                        size: 20,
-                      ),
-                    ),
+                    _buildCakeImage(order.items.first.cake.image, 40),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -476,20 +464,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                             ),
                             child: Row(
                               children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.primaryColor.withOpacity(
-                                      0.1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(
-                                    Icons.cake,
-                                    color: AppTheme.primaryColor,
-                                  ),
-                                ),
+                                _buildCakeImage(item.cake.image, 50),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
@@ -605,6 +580,59 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCakeImage(String? imageUrl, double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          size * 0.25,
+        ), // 25% of size for rounded corners
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(size * 0.25),
+        child: imageUrl != null && imageUrl.isNotEmpty
+            ? Image.network(
+                imageUrl,
+                width: size,
+                height: size,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return _buildFallbackIcon(size);
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return _buildFallbackIcon(size);
+                },
+              )
+            : _buildFallbackIcon(size),
+      ),
+    );
+  }
+
+  Widget _buildFallbackIcon(double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppTheme.primaryColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(size * 0.25),
+      ),
+      child: Icon(
+        Icons.cake,
+        color: AppTheme.primaryColor,
+        size: size * 0.5, // 50% of container size
       ),
     );
   }
