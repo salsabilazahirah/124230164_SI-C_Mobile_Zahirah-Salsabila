@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'order_history_screen.dart';
 import 'profile_screen.dart';
+import 'game_page.dart';
 import '../theme/app_theme.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,9 +16,10 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   late int _selectedIndex;
 
-  static const List<Widget> _screens = [
+  static final List<Widget> _screens = [
     HomeScreen(),
     OrderHistoryScreen(),
+    const GamePage(),
     ProfileScreen(),
   ];
 
@@ -67,10 +69,16 @@ class _MainScreenState extends State<MainScreen> {
                   index: 1,
                 ),
                 _buildNavItem(
+                  icon: Icons.videogame_asset_outlined,
+                  activeIcon: Icons.videogame_asset,
+                  label: 'Game',
+                  index: 2,
+                ),
+                _buildNavItem(
                   icon: Icons.person_outline,
                   activeIcon: Icons.person,
                   label: 'Profile',
-                  index: 2,
+                  index: 3,
                 ),
               ],
             ),

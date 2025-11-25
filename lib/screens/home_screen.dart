@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'package:provider/provider.dart';
 import '../models/cake_model.dart';
 import '../providers/cart_provider.dart';
@@ -231,313 +232,318 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: const SettingsDrawer(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // User Avatar Circle - Modern
-                      GestureDetector(
-                        onTap: () {
-                          _showProfileMenu(context, auth);
-                        },
-                        child: Container(
-                          width: 45,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFFF6B35), Color(0xFFFF8C42)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+      body: Container(
+        decoration: const BoxDecoration(color: Colors.white),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Header
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // User Avatar Circle - Modern
+                        GestureDetector(
+                          onTap: () {
+                            _showProfileMenu(context, auth);
+                          },
+                          child: Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFF6B35), Color(0xFFFF8C42)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(
+                                    0xFFFF6B35,
+                                  ).withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
                             ),
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFFFF6B35).withOpacity(0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
+                            child: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        // Location & Time - Single Row
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.location_on,
+                                size: 14,
+                                color: AppTheme.textDark,
+                              ),
+                              const SizedBox(width: 2),
+                              Flexible(
+                                child: Text(
+                                  '${settings.locationName} • ${settings.getFormattedTime()}',
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppTheme.textDark,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               ),
                             ],
                           ),
-                          child: const Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      // Location & Time - Single Row
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              size: 14,
-                              color: AppTheme.textDark,
-                            ),
-                            const SizedBox(width: 2),
-                            Flexible(
-                              child: Text(
-                                '${settings.locationName} • ${settings.getFormattedTime()}',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppTheme.textDark,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  // Greeting
-                  RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: AppTheme.textDark,
-                      ),
-                      children: [
-                        const TextSpan(text: 'Hello, '),
-                        TextSpan(
-                          text: '${auth.getDisplayName()}!',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Choose today fresh organic cakes',
-                    style: TextStyle(fontSize: 13, color: AppTheme.textLight),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(height: 20),
-                  // Search Bar with Filter
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
+                    const SizedBox(height: 20),
+                    // Greeting
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: AppTheme.textDark,
+                        ),
+                        children: [
+                          const TextSpan(text: 'Hello, '),
+                          TextSpan(
+                            text: '${auth.getDisplayName()}!',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Choose today fresh organic cakes',
+                      style: TextStyle(fontSize: 13, color: AppTheme.textLight),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 20),
+                    // Search Bar with Filter
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: TextField(
+                              controller: _searchController,
+                              onChanged: _filterCakes,
+                              decoration: InputDecoration(
+                                hintText: 'Cari kue favoritmu...',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 14,
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: Colors.grey[600],
+                                  size: 20,
+                                ),
+                                suffixIcon: _searchQuery.isNotEmpty
+                                    ? IconButton(
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: Colors.grey[600],
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          _searchController.clear();
+                                          _filterCakes('');
+                                        },
+                                      )
+                                    : null,
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // Filter button
+                        Container(
+                          width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: Colors.grey[100],
+                            color: AppTheme.primaryColor,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: TextField(
-                            controller: _searchController,
-                            onChanged: _filterCakes,
-                            decoration: InputDecoration(
-                              hintText: 'Cari kue favoritmu...',
-                              hintStyle: TextStyle(
-                                color: Colors.grey[500],
-                                fontSize: 14,
-                              ),
-                              prefixIcon: Icon(
-                                Icons.search,
-                                color: Colors.grey[600],
-                                size: 20,
-                              ),
-                              suffixIcon: _searchQuery.isNotEmpty
-                                  ? IconButton(
-                                      icon: Icon(
-                                        Icons.clear,
-                                        color: Colors.grey[600],
-                                        size: 20,
-                                      ),
-                                      onPressed: () {
-                                        _searchController.clear();
-                                        _filterCakes('');
-                                      },
-                                    )
-                                  : null,
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.tune,
+                              color: Colors.white,
+                              size: 20,
                             ),
+                            onPressed: () {
+                              _scaffoldKey.currentState?.openEndDrawer();
+                            },
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      // Filter button
-                      Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.tune,
-                            color: Colors.white,
-                            size: 20,
+                        const SizedBox(width: 8),
+                        // Cart button
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: AppTheme.primaryColor,
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          onPressed: () {
-                            _scaffoldKey.currentState?.openEndDrawer();
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      // Cart button
-                      Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Stack(
-                          children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.shopping_cart,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const CartScreen(),
-                                  ),
-                                );
-                              },
-                            ),
-                            if (cart.itemCount > 0)
-                              Positioned(
-                                right: 6,
-                                top: 6,
-                                child: Container(
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 16,
-                                    minHeight: 16,
-                                  ),
-                                  child: Text(
-                                    '${cart.itemCount}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                      fontWeight: FontWeight.bold,
+                          child: Stack(
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const CartScreen(),
                                     ),
-                                    textAlign: TextAlign.center,
+                                  );
+                                },
+                              ),
+                              if (cart.itemCount > 0)
+                                Positioned(
+                                  right: 6,
+                                  top: 6,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    constraints: const BoxConstraints(
+                                      minWidth: 16,
+                                      minHeight: 16,
+                                    ),
+                                    child: Text(
+                                      '${cart.itemCount}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // Filter Chips
-                  SizedBox(
-                    height: 36,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _filters.length,
-                      itemBuilder: (context, index) {
-                        final filter = _filters[index];
-                        final isSelected = _selectedFilter == filter;
-                        return GestureDetector(
-                          onTap: () => _selectFilter(filter),
-                          child: Container(
-                            margin: EdgeInsets.only(
-                              right: index == _filters.length - 1 ? 0 : 8,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? const Color(0xFFFF6B35)
-                                  : Colors.white,
-                              borderRadius: BorderRadius.circular(18),
-                              border: Border.all(
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    // Filter Chips
+                    SizedBox(
+                      height: 36,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _filters.length,
+                        itemBuilder: (context, index) {
+                          final filter = _filters[index];
+                          final isSelected = _selectedFilter == filter;
+                          return GestureDetector(
+                            onTap: () => _selectFilter(filter),
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: index == _filters.length - 1 ? 0 : 8,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
                                 color: isSelected
                                     ? const Color(0xFFFF6B35)
-                                    : const Color(0xFFE0E0E0),
-                              ),
-                              boxShadow: isSelected
-                                  ? [
-                                      BoxShadow(
-                                        color: const Color(
-                                          0xFFFF6B35,
-                                        ).withOpacity(0.3),
-                                        blurRadius: 4,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ]
-                                  : null,
-                            ),
-                            child: Center(
-                              child: Text(
-                                filter,
-                                style: TextStyle(
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(18),
+                                border: Border.all(
                                   color: isSelected
-                                      ? Colors.white
-                                      : const Color(0xFF666666),
-                                  fontWeight: isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.w500,
-                                  fontSize: 12,
+                                      ? const Color(0xFFFF6B35)
+                                      : const Color(0xFFE0E0E0),
                                 ),
-                                overflow: TextOverflow.ellipsis,
+                                boxShadow: isSelected
+                                    ? [
+                                        BoxShadow(
+                                          color: const Color(
+                                            0xFFFF6B35,
+                                          ).withOpacity(0.3),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ]
+                                    : null,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  filter,
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : const Color(0xFF666666),
+                                    fontWeight: isSelected
+                                        ? FontWeight.w600
+                                        : FontWeight.w500,
+                                    fontSize: 12,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            // Content
-            Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _filteredCakes.isEmpty
-                  ? const Center(child: Text('No cakes found'))
-                  : GridView.builder(
-                      padding: const EdgeInsets.all(20),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.65,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                          ),
-                      itemCount: _filteredCakes.length,
-                      itemBuilder: (context, index) {
-                        return CakeCard(cake: _filteredCakes[index]);
-                      },
-                    ),
-            ),
-          ],
+              // Content
+              Expanded(
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _filteredCakes.isEmpty
+                    ? const Center(child: Text('No cakes found'))
+                    : GridView.builder(
+                        padding: const EdgeInsets.all(20),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.65,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                            ),
+                        itemCount: _filteredCakes.length,
+                        itemBuilder: (context, index) {
+                          return CakeCard(cake: _filteredCakes[index]);
+                        },
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -431,7 +431,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    '📱 Mata kuliah Pemrograman Aplikasi Mobile memberikan pengalaman yang sangat berharga dalam mengembangkan aplikasi menggunakan Flutter.',
+                    '📱 ..',
                     style: TextStyle(
                       fontSize: 14,
                       height: 1.5,
@@ -441,7 +441,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    '🎯 Kesan: Pembelajaran yang sangat praktis, memungkinkan mahasiswa untuk langsung mengimplementasikan konsep ke dalam aplikasi nyata banget.',
+                    '🎯 Kesan: ',
                     style: TextStyle(
                       fontSize: 14,
                       height: 1.5,
@@ -451,7 +451,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    '💡 Saran: Boleh mengajarkan mahasiswa dari konsep dasar hingga mahir (10-100), bukan langsung ke level advanced (100-1000). Hal ini akan membantu mahasiswa memahami fondasi awal yang kuat sebelum mempelajari fitur-fitur kompleks.',
+                    '💡 Saran: ',
                     style: TextStyle(
                       fontSize: 14,
                       height: 1.5,

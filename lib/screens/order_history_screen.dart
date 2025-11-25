@@ -3,6 +3,8 @@ import '../theme/app_theme.dart';
 import '../models/order_model.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
+import '../providers/settings_provider.dart';
+import 'main_screen.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({super.key});
@@ -89,28 +91,14 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                   const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {
-                      // Navigate back to home screen
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const MainScreen(),
+                        ),
+                        (route) => false,
+                      );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryColor,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 16,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Browse Cakes',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child: const Text('Browse Cakes'),
                   ),
                 ],
               ),
@@ -210,24 +198,24 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withOpacity(0.1),
+                      color: Colors.orange.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          Icons.check_circle,
+                          Icons.hourglass_bottom,
                           size: 14,
-                          color: AppTheme.primaryColor,
+                          color: Colors.orange,
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'Completed',
+                          'Waiting',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: AppTheme.primaryColor,
+                            color: Colors.orange,
                           ),
                         ),
                       ],
@@ -319,12 +307,14 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           ),
                         ),
                         const SizedBox(height: 2),
-                        Text(
-                          '\$${order.totalAmount.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.primaryColor,
+                        Consumer<SettingsProvider>(
+                          builder: (context, settingsProvider, _) => Text(
+                            settingsProvider.formatPrice(order.totalAmount),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.primaryColor,
+                            ),
                           ),
                         ),
                       ],
@@ -488,13 +478,18 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                     ],
                                   ),
                                 ),
-                                Text(
-                                  '\$${item.totalPrice.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppTheme.primaryColor,
-                                  ),
+                                Consumer<SettingsProvider>(
+                                  builder: (context, settingsProvider, _) =>
+                                      Text(
+                                        settingsProvider.formatPrice(
+                                          item.totalPrice,
+                                        ),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppTheme.primaryColor,
+                                        ),
+                                      ),
                                 ),
                               ],
                             ),
@@ -538,10 +533,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           ),
                           _buildSummaryRow('Status', order.status),
                           const Divider(),
-                          _buildSummaryRow(
-                            'Total',
-                            '\$${order.totalAmount.toStringAsFixed(2)}',
-                            isTotal: true,
+                          Consumer<SettingsProvider>(
+                            builder: (context, settingsProvider, _) =>
+                                _buildSummaryRow(
+                                  'Total',
+                                  settingsProvider.formatPrice(
+                                    order.totalAmount,
+                                  ),
+                                  isTotal: true,
+                                ),
                           ),
                         ],
                       ),

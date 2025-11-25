@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SettingsProvider()..init()),
       ],
       child: MaterialApp(
-        title: 'Manysh',
+        title: 'Tokek',
         theme: AppTheme.getTheme(),
         debugShowCheckedModeBanner: false,
         home: Consumer<AuthProvider>(

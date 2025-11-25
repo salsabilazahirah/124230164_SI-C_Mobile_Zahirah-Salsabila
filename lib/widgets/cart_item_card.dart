@@ -6,8 +6,17 @@ import '../providers/settings_provider.dart';
 
 class CartItemCard extends StatelessWidget {
   final CartItem item;
+  final bool selectable;
+  final bool isSelected;
+  final ValueChanged<bool?>? onSelectedChanged;
 
-  const CartItemCard({super.key, required this.item});
+  const CartItemCard({
+    super.key,
+    required this.item,
+    this.selectable = false,
+    this.isSelected = false,
+    this.onSelectedChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +48,7 @@ class CartItemCard extends StatelessWidget {
                   Icon(Icons.delete_sweep, color: Colors.white, size: 28),
                   SizedBox(height: 4),
                   Text(
-                    'Hapus',
+                    'Delete',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -56,86 +65,120 @@ class CartItemCard extends StatelessWidget {
         return await showDialog<bool>(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
+            return Dialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(24),
               ),
-              title: Row(
-                children: const [
-                  Icon(
-                    Icons.warning_amber_rounded,
-                    color: Color(0xFFFF6B35),
-                    size: 28,
-                  ),
-                  SizedBox(width: 12),
-                  Text(
-                    'Hapus Item',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Yakin ingin menghapus',
-                    style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    item.cake.title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2D2D2D),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'dari keranjang?',
-                    style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
-                  ),
-                  child: const Text(
-                    'Batal',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF666666),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 28,
                 ),
-                ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFF6B35),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF6B35).withOpacity(0.12),
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: const Icon(
+                        Icons.delete_forever,
+                        color: Color(0xFFFF6B35),
+                        size: 40,
+                      ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    const SizedBox(height: 18),
+                    const Text(
+                      'Remove Item',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2D2D2D),
+                      ),
                     ),
-                    elevation: 0,
-                  ),
-                  child: const Text(
-                    'Hapus',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Are you sure you want to remove',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      item.cake.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2D2D2D),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'from your cart?',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFF666666),
+                              side: const BorderSide(color: Color(0xFFEEEEEE)),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFFF6B35),
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: const Text(
+                              'Remove',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
+              ),
             );
           },
         );
@@ -159,6 +202,18 @@ class CartItemCard extends StatelessWidget {
         ),
         child: Row(
           children: [
+            // Checkbox on the far left (image moved to the right of checkbox)
+            if (selectable)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Transform.scale(
+                  scale: 0.95,
+                  child: Checkbox(
+                    value: isSelected,
+                    onChanged: onSelectedChanged,
+                  ),
+                ),
+              ),
             // Image
             Container(
               width: 60,
@@ -178,7 +233,7 @@ class CartItemCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 12),
             // Details
             Expanded(
               child: Column(
@@ -199,132 +254,28 @@ class CartItemCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Delete button sejajar
-                      Container(
-                        margin: const EdgeInsets.only(left: 4),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.delete_outline,
-                            size: 20,
-                            color: Color(0xFFFF6B35),
-                          ),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          splashRadius: 20,
-                          onPressed: () async {
-                            final confirm = await showDialog<bool>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  title: Row(
-                                    children: const [
-                                      Icon(
-                                        Icons.warning_amber_rounded,
-                                        color: Color(0xFFFF6B35),
-                                        size: 28,
-                                      ),
-                                      SizedBox(width: 12),
-                                      Text(
-                                        'Hapus Item',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Yakin ingin menghapus',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        item.cake.title,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF2D2D2D),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        'dari keranjang?',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
-                                      style: TextButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 24,
-                                          vertical: 12,
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Batal',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xFF666666),
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(
-                                          0xFFFF6B35,
-                                        ),
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 24,
-                                          vertical: 12,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      child: const Text(
-                                        'Hapus',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                            if (confirm == true) {
-                              cart.removeItem(item.cake.id);
-                            }
-                          },
-                        ),
-                      ),
+                      // per-item delete button removed to keep layout clean; users can swipe to delete or use batch delete
                     ],
                   ),
+                  const SizedBox(height: 6),
+                  if (item.cake.price == 0.0)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Text(
+                        'FREE',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 4),
                   Text(
                     settings.formatPrice(item.cake.price),

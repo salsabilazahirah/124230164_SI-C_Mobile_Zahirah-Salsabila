@@ -6,8 +6,57 @@ import '../widgets/cart_item_card.dart';
 import '../theme/app_theme.dart';
 import 'checkout_screen.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  final Set<int> _selectedIds = {};
+
+  void _toggleSelectAll(List items) {
+    setState(() {
+      if (_selectedIds.length == items.length) {
+        _selectedIds.clear();
+      } else {
+        _selectedIds.clear();
+        for (var it in items) {
+          _selectedIds.add(it.cake.id);
+        }
+      }
+    });
+  }
+
+  Future<void> _deleteSelected(BuildContext context, CartProvider cart) async {
+    if (_selectedIds.isEmpty) return;
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Remove selected items'),
+        content: Text(
+          'Remove ${_selectedIds.length} selected item(s) from cart?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Remove'),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true) {
+      for (var id in _selectedIds.toList()) {
+        cart.removeItem(id);
+      }
+      setState(() => _selectedIds.clear());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +89,57 @@ class CartScreen extends StatelessWidget {
             )
           : Column(
               children: [
+                // Selection toolbar
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 8,
+                  ),
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value:
+                            _selectedIds.length == cart.items.length &&
+                            cart.items.isNotEmpty,
+                        onChanged: (_) => _toggleSelectAll(cart.items),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text('Select All'),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: _selectedIds.isEmpty
+                            ? null
+                            : () => _deleteSelected(context, cart),
+                        icon: const Icon(
+                          Icons.delete_outline,
+                          color: Color(0xFFFF6B35),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(20),
                     itemCount: cart.items.length,
                     itemBuilder: (context, index) {
                       final item = cart.items[index];
-                      return CartItemCard(item: item);
+                      final selected = _selectedIds.contains(item.cake.id);
+                      return CartItemCard(
+                        item: item,
+                        selectable: true,
+                        isSelected: selected,
+                        onSelectedChanged: (v) {
+                          setState(() {
+                            if (v == true) {
+                              _selectedIds.add(item.cake.id);
+                            } else {
+                              _selectedIds.remove(item.cake.id);
+                            }
+                          });
+                        },
+                      );
                     },
                   ),
                 ),

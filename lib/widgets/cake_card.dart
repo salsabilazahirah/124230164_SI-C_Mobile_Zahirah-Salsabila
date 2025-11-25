@@ -38,41 +38,37 @@ class CakeCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Image Section
-            AspectRatio(
-              aspectRatio: 1.0,
+            // Image Section with consistent sizing
+            Container(
+              height: 140, // Fixed height for consistency
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F3F0),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+              ),
               child: Stack(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF5F3F0),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
-                      ),
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
                     ),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
-                      ),
-                      child: Image.network(
-                        cake.image,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Center(
-                            child: Icon(
-                              Icons.cake,
-                              size: 50,
-                              color: Colors.grey,
-                            ),
-                          );
-                        },
-                      ),
+                    child: Image.network(
+                      cake.image,
+                      height: 140,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Center(
+                          child: Icon(Icons.cake, size: 50, color: Colors.grey),
+                        );
+                      },
                     ),
                   ),
-                  // Add Button - Like in attachment
+                  // Add Button - Like in original
                   Positioned(
                     bottom: 8,
                     right: 8,
@@ -103,7 +99,7 @@ class CakeCard extends StatelessWidget {
                 ],
               ),
             ),
-            // Details Section - Like in attachment
+            // Details Section - Like original
             Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
