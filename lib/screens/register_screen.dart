@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tokokue/screens/login_screen.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_theme.dart';
 import 'main_screen.dart';
@@ -86,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       if (mounted) {
         if (success) {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const MainScreen()),
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

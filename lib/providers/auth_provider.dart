@@ -43,7 +43,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      User? user = await _dbHelper.verifyLogin(usernameOrEmail, password);
+      final user = await _dbHelper.verifyLogin(usernameOrEmail, password);
       if (user != null) {
         _currentUser = user;
         // Save to SharedPreferences
@@ -68,7 +68,7 @@ class AuthProvider extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _error = 'Login failed: $e';
+      _error = 'Terjadi kesalahan: $e';
       _isLoading = false;
       notifyListeners();
       return false;
@@ -87,6 +87,10 @@ class AuthProvider extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
+      final passwordHash = DatabaseHelper.instance.hashPassword(password);
+      debugPrint(
+        'Register: username=$username, email=$email, password=$password, hash=$passwordHash',
+      );
       // Check if username exists
       if (await _dbHelper.usernameExists(username)) {
         _error = 'Username sudah digunakan';
@@ -106,7 +110,7 @@ class AuthProvider extends ChangeNotifier {
       final user = User(
         username: username,
         email: email,
-        passwordHash: _hashPassword(password),
+        passwordHash: passwordHash,
         fullName: fullName,
         phone: phone,
       );

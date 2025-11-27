@@ -66,12 +66,9 @@ flutter:
     - assets/images/
     - assets/images/backgroundgame.jpg
     - assets/images/cake.png
-    - assets/images/chef.png
+    - assets/images/chef.webp
     - assets/images/Home.png
-    - assets/images/pou.png
     - assets/animation/
-    - pou-main/food_drop/food/
-    - pou-main/food_drop/trash/
     - assets/cute.mp3
     - pou-main/audio/eat.wav
 

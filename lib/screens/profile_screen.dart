@@ -431,7 +431,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    '📱 ..',
+                    'Kesan : Terimakasih',
                     style: TextStyle(
                       fontSize: 14,
                       height: 1.5,
@@ -441,7 +441,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    '🎯 Kesan: ',
+                    'Saran : ',
                     style: TextStyle(
                       fontSize: 14,
                       height: 1.5,
@@ -813,7 +813,10 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
+  // Ganti fungsi _pickImage dengan versi sederhana tanpa loading dialog
+
   Future<void> _pickImage(BuildContext context, ImageSource source) async {
+    final mainContext = this.context; // context utama dari State
     try {
       final ImagePicker picker = ImagePicker();
       final XFile? image = await picker.pickImage(
@@ -824,64 +827,42 @@ class _ProfileScreenState extends State<ProfileScreen>
       );
 
       if (image != null) {
-        Navigator.pop(context); // Close bottom sheet
+        // Tutup bottom sheet jika masih terbuka
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+        }
 
-        // Show loading dialog
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => const AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 16),
-                Text('Mengupload foto...'),
-              ],
-            ),
-          ),
-        );
-
-        final auth = Provider.of<AuthProvider>(context, listen: false);
-
-        // For now, we'll convert the image to a data URL or save it locally
-        // In a real app, you'd upload this to your server
+        final auth = Provider.of<AuthProvider>(mainContext, listen: false);
         final String imagePath = image.path;
 
-        final success = await auth.updateProfile(
-          profilePicture: imagePath, // Store local path for now
-        );
+        final success = await auth.updateProfile(profilePicture: imagePath);
 
-        if (mounted) {
-          Navigator.pop(context); // Close loading dialog
+        if (!mounted) return;
 
-          if (success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Foto profile berhasil diperbarui'),
-                backgroundColor: Colors.green,
-              ),
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(auth.error ?? 'Gagal memperbarui foto'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
+        if (success) {
+          ScaffoldMessenger.of(mainContext).showSnackBar(
+            const SnackBar(
+              content: Text('Foto profile berhasil diperbarui'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(mainContext).showSnackBar(
+            SnackBar(
+              content: Text(auth.error ?? 'Gagal memperbarui foto'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       }
     } catch (e) {
-      if (mounted) {
-        Navigator.pop(context); // Close bottom sheet if still open
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(this.context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 

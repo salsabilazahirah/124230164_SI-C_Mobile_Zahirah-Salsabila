@@ -22,6 +22,7 @@ class _GamePageState extends State<GamePage> {
   final AudioPlayer _bgPlayer = AudioPlayer();
 
   bool _isRunning = false;
+  bool _isPaused = false;
   int _score = 0;
   int _timeLeft = 30;
   Offset _targetPos = const Offset(100, 200);
@@ -37,8 +38,28 @@ class _GamePageState extends State<GamePage> {
   double _explosionSize = 0;
 
   void _startGame(BoxConstraints c) {
+    if (_isPaused) {
+      setState(() {
+        _isRunning = true;
+        _isPaused = false;
+      });
+      _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+        if (_timeLeft <= 1) {
+          _endGame();
+        } else {
+          setState(() => _timeLeft--);
+        }
+      });
+      _moveTimer = Timer.periodic(Duration(milliseconds: _moveInterval), (_) {
+        _randomizePos(c);
+      });
+      _bgPlayer.resume();
+      return;
+    }
+
     setState(() {
       _isRunning = true;
+      _isPaused = false;
       _score = 0;
       _timeLeft = 30;
       _targetSize = 80;
@@ -587,11 +608,11 @@ class _GamePageState extends State<GamePage> {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'assets/images/backgroundgame.jpg',
+                  'assets/images/backgroundgame.webp',
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     debugPrint(
-                      'Failed to load asset: assets/images/backgroundgame.jpg -> $error',
+                      'Failed to load asset: assets/images/backgroundgame.webp -> $error',
                     );
                     return Container(color: const Color(0xFFFFF8F0));
                   },
@@ -612,7 +633,63 @@ class _GamePageState extends State<GamePage> {
                 ),
               ),
 
-              // Semua kode lain tetap
+              // Chef image in center
+              if (!_isRunning)
+                Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/images/chef.webp',
+                        width: 400,
+                        height: 400,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          debugPrint('Failed to load chef.webp: $error');
+                          return Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: const Icon(
+                              Icons.person_rounded,
+                              size: 100,
+                              color: Color(0xFFFF6B35),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () => _startGame(constraints),
+                        icon: const Icon(Icons.play_arrow_rounded),
+                        label: const Text(
+                          "Tap to Start",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.primaryColor,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 16,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          elevation: 4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              // Top status bar
               Positioned(
                 top: 20,
                 left: 16,
@@ -649,11 +726,9 @@ class _GamePageState extends State<GamePage> {
                           ],
                         ),
                         ElevatedButton.icon(
-                          onPressed: _isRunning
-                              ? null
-                              : () => _startGame(constraints),
-                          icon: const Icon(Icons.play_arrow),
-                          label: const Text("Mulai"),
+                          onPressed: _isRunning ? _pauseGame : null,
+                          icon: const Icon(Icons.pause),
+                          label: const Text("Pause"),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.primaryColor,
                             foregroundColor: Colors.white,
@@ -704,6 +779,16 @@ class _GamePageState extends State<GamePage> {
         },
       ),
     );
+  }
+
+  void _pauseGame() {
+    setState(() {
+      _isPaused = true;
+      _isRunning = false;
+    });
+    _timer?.cancel();
+    _moveTimer?.cancel();
+    _bgPlayer.pause();
   }
 
   @override

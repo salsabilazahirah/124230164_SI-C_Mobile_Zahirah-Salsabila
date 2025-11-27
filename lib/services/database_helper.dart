@@ -4,6 +4,8 @@ import '../models/user_model.dart';
 import '../models/order_model.dart';
 import '../models/cart_item.dart';
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
@@ -62,16 +64,15 @@ class DatabaseHelper {
     await db.insert('users', {
       'username': 'admin',
       'email': 'admin@tokokue.com',
-      'password_hash': _hashPassword('admin123'),
+      'password_hash': hashPassword('admin123'), // <-- pakai SHA-256
       'full_name': 'Admin',
       'created_at': DateTime.now().toIso8601String(),
     });
 
-    // Create demo user
     await db.insert('users', {
       'username': 'bila',
       'email': 'bila@tokokue.com',
-      'password_hash': _hashPassword('bila123'),
+      'password_hash': hashPassword('bila123'), // <-- pakai SHA-256
       'full_name': 'Bila',
       'created_at': DateTime.now().toIso8601String(),
     });
@@ -80,6 +81,13 @@ class DatabaseHelper {
   String _hashPassword(String password) {
     // Simple hash for demo - in production use crypto package properly
     return password.split('').reversed.join() + '_hashed';
+  }
+
+  // Tambahkan ini:
+  String hashPassword(String password) {
+    final bytes = utf8.encode(password);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   // Create (Register)
@@ -171,20 +179,20 @@ class DatabaseHelper {
 
   // Verify login
   Future<User?> verifyLogin(String usernameOrEmail, String password) async {
-    final db = await database;
-    final hashedPassword = _hashPassword(password);
-
+    final db = await instance.database;
+    final passwordHash = hashPassword(password); // <-- pakai SHA-256
+    debugPrint(
+      'Login: usernameOrEmail=$usernameOrEmail, password=$password, hash=$passwordHash',
+    );
     final maps = await db.query(
       'users',
       where: '(username = ? OR email = ?) AND password_hash = ?',
-      whereArgs: [usernameOrEmail, usernameOrEmail, hashedPassword],
+      whereArgs: [usernameOrEmail, usernameOrEmail, passwordHash],
     );
-
+    debugPrint('Login query result: ${maps.length} user(s) found');
     if (maps.isNotEmpty) {
-      final user = User.fromMap(maps.first);
-      // Update last login
-      await updateLastLogin(user.id!);
-      return user;
+      debugPrint('User found: ${maps.first}');
+      return User.fromMap(maps.first);
     }
     return null;
   }

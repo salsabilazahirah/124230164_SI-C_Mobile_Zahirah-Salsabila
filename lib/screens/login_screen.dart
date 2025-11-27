@@ -26,7 +26,6 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  // Rive controller and inputs (ubah sesuai contoh river)
   rive.StateMachineController? _riveController;
   rive.SMIBool? _lookOnEmail;
   rive.SMINumber? _followOnEmail;
@@ -89,6 +88,11 @@ class _LoginScreenState extends State<LoginScreen>
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
+      // Debug print data yang dimasukkan
+      debugPrint('Login attempt:');
+      debugPrint('Username/Email: ${_usernameController.text.trim()}');
+      debugPrint('Password: ${_passwordController.text}');
+
       final auth = Provider.of<AuthProvider>(context, listen: false);
       final cartProvider = Provider.of<CartProvider>(context, listen: false);
 
@@ -96,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen>
         _usernameController.text.trim(),
         _passwordController.text,
       );
+      debugPrint('Login result: ${success ? "Success" : "Failed"}');
 
       if (mounted) {
         if (success) {
@@ -143,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen>
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
-                  // Rive Animation (ubah bagian ini)
+                  // Rive Animation
                   SizedBox(
                     height: 250,
                     width: 250,
