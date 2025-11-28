@@ -431,7 +431,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'Kesan : Terimakasih',
+                    'Kesan : Terimakasih Pak Bagus atas kehidupan dar der dor ini, masuk kelas mobile rasanya kayak.. wah ada gebrakan apalagi ini, menurut Bapak mobile ini bakalan jadi memorable, tapi menurut saya ketawa Bapak yang sangat memorable (AKWOAKW) Terimakasih banyak atas ilmu yang diberikan, semoga ilmu ini bermanfaat dan menjadi bekal saya kedepannya.',
                     style: TextStyle(
                       fontSize: 14,
                       height: 1.5,
@@ -441,7 +441,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Saran : ',
+                    'Saran : Saran untuk kedepan mungkin bisa di announce dan berikan timeline project dari awal dengan ketentuan yang jelas, mungkin dari situ kami bisa mulai mikir walaupun kerjainnya mepet hehe, tapi setidaknya udah ada gambaran dari kami apa aja yang dibuat. Kemudian boleh diajarin secara konsep dari awal bagaimana sebagai fondasi, dikarenakan kami masih pemula yang bingung tiba tiba buat kalkulator hehe',
                     style: TextStyle(
                       fontSize: 14,
                       height: 1.5,
@@ -449,44 +449,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ),
                     textAlign: TextAlign.justify,
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    '💡 Saran: ',
-                    style: TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
-                      color: AppTheme.textDark,
-                    ),
-                    textAlign: TextAlign.justify,
-                  ),
+
                   const SizedBox(height: 12),
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: AppTheme.primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(
-                          Icons.star,
-                          color: AppTheme.primaryColor,
-                          size: 16,
-                        ),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            'Terima kasih atas bimbingannya Bapak Bagus :)',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              color: AppTheme.primaryColor,
-                              fontStyle: FontStyle.italic,
-                            ),
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ],
