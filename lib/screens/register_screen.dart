@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tokokue/screens/login_screen.dart';
 import '../providers/auth_provider.dart';
-import '../theme/app_theme.dart';
 import 'main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -172,8 +171,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        AppTheme.primaryColor,
-                                        AppTheme.primaryColor.withOpacity(0.7),
+                                        Color(0xFFFF6B35),
+                                        Color(0xFFFF6B35).withOpacity(0.7),
                                       ],
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
@@ -181,8 +180,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     borderRadius: BorderRadius.circular(20),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: AppTheme.primaryColor
-                                            .withOpacity(0.3),
+                                        color: Color(
+                                          0xFFFF6B35,
+                                        ).withOpacity(0.3),
                                         blurRadius: 15,
                                         offset: const Offset(0, 5),
                                       ),
@@ -225,6 +225,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                             controller: _fullNameController,
                             label: 'Full Name',
                             icon: Icons.person_outline,
+                            fillColor: Colors.white,
+                            iconColor: Colors.orange,
                           ),
 
                           const SizedBox(height: 16),
@@ -243,6 +245,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                               }
                               return null;
                             },
+                            fillColor: Colors.white,
+                            iconColor: Colors.orange,
                           ),
 
                           const SizedBox(height: 16),
@@ -264,6 +268,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                               }
                               return null;
                             },
+                            fillColor: Colors.white,
+                            iconColor: Colors.orange,
                           ),
 
                           const SizedBox(height: 16),
@@ -278,7 +284,6 @@ class _RegisterScreenState extends State<RegisterScreen>
                               if (value == null || value.isEmpty) {
                                 return 'Please enter phone number';
                               }
-                              // Basic phone validation (minimum 10 digits)
                               String phoneDigits = value.replaceAll(
                                 RegExp(r'[^\d]'),
                                 '',
@@ -288,6 +293,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                               }
                               return null;
                             },
+                            fillColor: Colors.white,
+                            iconColor: Colors.orange,
                           ),
 
                           const SizedBox(height: 16),
@@ -313,6 +320,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                               }
                               return null;
                             },
+                            fillColor: Colors.white,
+                            iconColor: Colors.red,
                           ),
 
                           const SizedBox(height: 16),
@@ -339,6 +348,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                               }
                               return null;
                             },
+                            fillColor: Colors.white,
+                            iconColor: Colors.red,
                           ),
 
                           const SizedBox(height: 32),
@@ -348,17 +359,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                             height: 58,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(18),
-                              gradient: LinearGradient(
-                                colors: [
-                                  AppTheme.primaryColor,
-                                  AppTheme.primaryColor.withOpacity(0.8),
-                                ],
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFF6B35), Color(0xFFFF6B35)],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.primaryColor.withOpacity(0.4),
+                                  color: Color(0xFFFF6B35).withOpacity(0.4),
                                   blurRadius: 15,
                                   offset: const Offset(0, 8),
                                 ),
@@ -423,10 +431,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                               ),
                               GestureDetector(
                                 onTap: () => Navigator.pop(context),
-                                child: Text(
+                                child: const Text(
                                   'Login',
                                   style: TextStyle(
-                                    color: AppTheme.primaryColor,
+                                    color: Color(0xFFFF6B35),
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -458,6 +466,9 @@ class _RegisterScreenState extends State<RegisterScreen>
     bool isPassword = false,
     bool obscureText = false,
     VoidCallback? onToggleVisibility,
+    Color? fillColor,
+    Color? iconColor,
+    Color? textColor,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -475,7 +486,11 @@ class _RegisterScreenState extends State<RegisterScreen>
         keyboardType: keyboardType,
         obscureText: obscureText,
         validator: validator,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: textColor ?? Colors.black,
+        ),
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(
@@ -487,10 +502,10 @@ class _RegisterScreenState extends State<RegisterScreen>
             margin: const EdgeInsets.all(12),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.1),
+              color: (iconColor ?? Colors.orange).withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppTheme.primaryColor, size: 20),
+            child: Icon(icon, color: iconColor ?? Colors.orange, size: 20),
           ),
           suffixIcon: isPassword
               ? IconButton(
@@ -502,7 +517,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 )
               : null,
           filled: true,
-          fillColor: Colors.white,
+          fillColor: fillColor ?? Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,
@@ -513,7 +528,7 @@ class _RegisterScreenState extends State<RegisterScreen>
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: AppTheme.primaryColor, width: 2),
+            borderSide: BorderSide(color: Colors.orange, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),

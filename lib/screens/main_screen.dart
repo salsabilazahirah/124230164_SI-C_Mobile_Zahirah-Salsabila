@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'order_history_screen.dart';
 import 'profile_screen.dart';
-import 'game_page.dart';
+import 'game_screen.dart';
 import '../theme/app_theme.dart';
 
 class MainScreen extends StatefulWidget {

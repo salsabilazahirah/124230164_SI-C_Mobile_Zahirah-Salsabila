@@ -69,7 +69,7 @@ class _GamePageState extends State<GamePage> {
     });
 
     _bgPlayer.setReleaseMode(ReleaseMode.loop);
-    _bgPlayer.play(AssetSource('cute.mp3'));
+    _bgPlayer.play(AssetSource('assets/cute.mp3'));
 
     _timer?.cancel();
     _moveTimer?.cancel();
@@ -130,7 +130,7 @@ class _GamePageState extends State<GamePage> {
         (c) => c.title.toLowerCase().contains('strawberry'),
         orElse: () => Cake(
           id: DateTime.now().millisecondsSinceEpoch,
-          title: 'Strawberry Cake (Free)',
+          title: 'Strawberry Cake',
           description: 'Free strawberry mini dari game',
           image: '',
           price: 0.0,
@@ -144,7 +144,7 @@ class _GamePageState extends State<GamePage> {
     } catch (e) {
       rewardCake = Cake(
         id: DateTime.now().millisecondsSinceEpoch,
-        title: 'Strawberry Cake (Free)',
+        title: 'Strawberry Cake',
         description: 'Free strawberry mini dari game',
         image: '',
         price: 0.0,
@@ -156,7 +156,6 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
-    // Create free unique copy
     final freeCake = Cake(
       id: DateTime.now().millisecondsSinceEpoch,
       title: '${rewardCake.title} (Free)',
@@ -194,103 +193,215 @@ class _GamePageState extends State<GamePage> {
                   margin: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(28),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
-                        blurRadius: 30,
-                        offset: const Offset(0, 15),
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 40,
+                        offset: const Offset(0, 20),
                       ),
                     ],
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // Header with gradient and trophy icon
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.symmetric(vertical: 32),
                         decoration: BoxDecoration(
-                          gradient: AppTheme.chocolateGradient,
+                          gradient: LinearGradient(
+                            colors: [Color(0xFFFF6B35), Color(0xFFFF8C42)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24),
+                            topLeft: Radius.circular(28),
+                            topRight: Radius.circular(28),
                           ),
                         ),
                         child: Column(
                           children: [
-                            const Icon(
-                              Icons.celebration_outlined,
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'SELAMAT!',
-                              style: TextStyle(
+                            // Trophy icon with glow effect
+                            Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white.withOpacity(0.3),
+                                    blurRadius: 20,
+                                    spreadRadius: 5,
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.emoji_events_rounded,
                                 color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                letterSpacing: 1.5,
+                                size: 48,
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Skor: $_score ⭐',
-                              style: const TextStyle(
+                            const SizedBox(height: 16),
+                            const Text(
+                              'CONGRATS!',
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 28,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.25),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.star_rounded,
+                                    color: Colors.yellow[300],
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Skor: $_score',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
+
+                      // Content area
                       Padding(
-                        padding: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(28),
                         child: Column(
                           children: [
+                            // Success message with icon
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.green.shade50,
+                                color: Colors.green[50],
                                 borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[100],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.check_circle_rounded,
+                                      color: Colors.green[700],
+                                      size: 24,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      'The gift has been successfully added to the shopping cart!',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.green[800],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Cake reward card
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.orange[50]!,
+                                    Colors.pink[50]!,
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: Colors.green.shade200,
+                                  color: Color(0xFFFF6B35).withOpacity(0.3),
                                   width: 2,
                                 ),
                               ),
                               child: Row(
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: rewardCake.image.isNotEmpty
-                                        ? Image.network(
-                                            rewardCake.image,
-                                            width: 80,
-                                            height: 80,
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (c, e, s) =>
-                                                _smallCakeIcon(),
-                                          )
-                                        : Container(
-                                            width: 80,
-                                            height: 80,
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                colors: [
-                                                  Colors.pink.shade200,
-                                                  Colors.pink.shade300,
-                                                ],
+                                  // Cake image
+                                  Container(
+                                    width: 90,
+                                    height: 90,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: rewardCake.image.isNotEmpty
+                                          ? Image.network(
+                                              rewardCake.image,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (c, e, s) =>
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                        colors: [
+                                                          Colors.pink[300]!,
+                                                          Colors.pink[400]!,
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    child: const Icon(
+                                                      Icons.cake_rounded,
+                                                      color: Colors.white,
+                                                      size: 45,
+                                                    ),
+                                                  ),
+                                            )
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Colors.pink[300]!,
+                                                    Colors.pink[400]!,
+                                                  ],
+                                                ),
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              child: const Icon(
+                                                Icons.cake_rounded,
+                                                color: Colors.white,
+                                                size: 45,
+                                              ),
                                             ),
-                                            child: const Icon(
-                                              Icons.cake,
-                                              color: Colors.white,
-                                              size: 40,
-                                            ),
-                                          ),
+                                    ),
                                   ),
                                   const SizedBox(width: 16),
                                   Expanded(
@@ -300,31 +411,59 @@ class _GamePageState extends State<GamePage> {
                                       children: [
                                         Text(
                                           freeCake.title,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xFF2C2C2C),
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.grey[800],
                                           ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        const SizedBox(height: 4),
+                                        const SizedBox(height: 8),
                                         Container(
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 12,
-                                            vertical: 4,
+                                            vertical: 6,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: Colors.green.shade600,
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.green[600]!,
+                                                Colors.green[500]!,
+                                              ],
+                                            ),
                                             borderRadius: BorderRadius.circular(
-                                              12,
+                                              20,
                                             ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.green.withOpacity(
+                                                  0.3,
+                                                ),
+                                                blurRadius: 8,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
                                           ),
-                                          child: const Text(
-                                            'GRATIS!',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.card_giftcard_rounded,
+                                                color: Colors.white,
+                                                size: 16,
+                                              ),
+                                              const SizedBox(width: 6),
+                                              const Text(
+                                                'FREE',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w800,
+                                                  fontSize: 13,
+                                                  letterSpacing: 0.5,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
@@ -333,17 +472,10 @@ class _GamePageState extends State<GamePage> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 20),
-                            const Text(
-                              '🎉 Berhasil ditambahkan ke keranjang! 🎉',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF2C2C2C),
-                              ),
-                            ),
-                            const SizedBox(height: 24),
+
+                            const SizedBox(height: 28),
+
+                            // Action buttons
                             Row(
                               children: [
                                 Expanded(
@@ -351,23 +483,32 @@ class _GamePageState extends State<GamePage> {
                                     onPressed: () =>
                                         Navigator.of(context).pop(),
                                     style: OutlinedButton.styleFrom(
-                                      foregroundColor: AppTheme.primaryColor,
+                                      foregroundColor: Color(0xFFFF6B35),
                                       side: BorderSide(
-                                        color: AppTheme.primaryColor,
+                                        color: Color(0xFFFF6B35),
+                                        width: 2,
                                       ),
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 14,
                                       ),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(14),
                                       ),
                                     ),
-                                    child: const Text(
-                                      'Main Lagi',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.replay_rounded, size: 20),
+                                        const SizedBox(width: 8),
+                                        const Text(
+                                          'Play Again',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -384,22 +525,33 @@ class _GamePageState extends State<GamePage> {
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppTheme.primaryColor,
+                                      backgroundColor: Color(0xFFFF6B35),
+                                      foregroundColor: Colors.white,
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 14,
                                       ),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(14),
                                       ),
-                                      elevation: 0,
+                                      elevation: 2,
                                     ),
-                                    child: const Text(
-                                      'Lihat Keranjang',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.shopping_cart_rounded,
+                                          size: 20,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Text(
+                                          'Cart',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -556,7 +708,7 @@ class _GamePageState extends State<GamePage> {
                     elevation: 0,
                   ),
                   child: const Text(
-                    'Main Lagi',
+                    'Play Again',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
                 ),
@@ -598,7 +750,7 @@ class _GamePageState extends State<GamePage> {
         backgroundColor: AppTheme.primaryColor,
         title: const Text(
           "Mini Game",
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
@@ -633,7 +785,6 @@ class _GamePageState extends State<GamePage> {
                 ),
               ),
 
-              // Chef image in center
               if (!_isRunning)
                 Center(
                   child: Column(

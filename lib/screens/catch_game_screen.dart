@@ -10,7 +10,7 @@ import '../providers/cart_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../services/api_service.dart';
 import 'cart_screen.dart';
-import 'game_page.dart';
+import 'game_screen.dart';
 
 
 class CatchGameScreen extends StatefulWidget {

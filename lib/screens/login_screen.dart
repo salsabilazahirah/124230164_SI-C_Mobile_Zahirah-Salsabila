@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:rive/rive.dart' as rive;
 import '../providers/auth_provider.dart';
 import '../providers/cart_provider.dart';
-import '../theme/app_theme.dart';
 import 'register_screen.dart';
 import 'main_screen.dart';
 
@@ -88,11 +87,6 @@ class _LoginScreenState extends State<LoginScreen>
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      // Debug print data yang dimasukkan
-      debugPrint('Login attempt:');
-      debugPrint('Username/Email: ${_usernameController.text.trim()}');
-      debugPrint('Password: ${_passwordController.text}');
-
       final auth = Provider.of<AuthProvider>(context, listen: false);
       final cartProvider = Provider.of<CartProvider>(context, listen: false);
 
@@ -100,7 +94,6 @@ class _LoginScreenState extends State<LoginScreen>
         _usernameController.text.trim(),
         _passwordController.text,
       );
-      debugPrint('Login result: ${success ? "Success" : "Failed"}');
 
       if (mounted) {
         if (success) {
@@ -135,6 +128,8 @@ class _LoginScreenState extends State<LoginScreen>
 
     return Scaffold(
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -142,8 +137,8 @@ class _LoginScreenState extends State<LoginScreen>
             colors: [Color(0xFFFFA726), Color(0xFFFF7043)],
           ),
         ),
-        child: SafeArea(
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -238,6 +233,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   return null;
                                 },
                                 focusNode: _usernameFocusNode,
+                                fillColor: Colors.white,
+                                iconColor: Colors.orange,
                               ),
 
                               const SizedBox(height: 20),
@@ -254,6 +251,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   return null;
                                 },
                                 focusNode: _passwordFocusNode,
+                                fillColor: Colors.white,
+                                iconColor: Colors.red,
                               ),
 
                               const SizedBox(height: 32),
@@ -262,17 +261,15 @@ class _LoginScreenState extends State<LoginScreen>
                                 height: 56,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(16),
-                                  gradient: LinearGradient(
+                                  gradient: const LinearGradient(
                                     colors: [
-                                      AppTheme.primaryColor,
-                                      AppTheme.primaryColor.withOpacity(0.8),
+                                      Color(0xFFFFA726),
+                                      Color(0xFFFF7043),
                                     ],
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: AppTheme.primaryColor.withOpacity(
-                                        0.3,
-                                      ),
+                                      color: Colors.orange.withOpacity(0.3),
                                       blurRadius: 10,
                                       offset: const Offset(0, 5),
                                     ),
@@ -334,7 +331,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     child: Text(
                                       'Register',
                                       style: TextStyle(
-                                        color: AppTheme.primaryColor,
+                                        color: Color(0xFFFF6B35),
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -368,6 +365,9 @@ class _LoginScreenState extends State<LoginScreen>
     bool isPassword = false,
     String? Function(String?)? validator,
     FocusNode? focusNode,
+    Color? fillColor,
+    Color? iconColor,
+    Color? textColor,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -385,7 +385,11 @@ class _LoginScreenState extends State<LoginScreen>
         focusNode: focusNode,
         obscureText: isPassword ? _obscurePassword : false,
         validator: validator,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: textColor ?? Colors.black,
+        ),
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(
@@ -397,10 +401,10 @@ class _LoginScreenState extends State<LoginScreen>
             margin: const EdgeInsets.all(12),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.1),
+              color: (iconColor ?? Colors.orange).withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppTheme.primaryColor, size: 20),
+            child: Icon(icon, color: iconColor ?? Colors.orange, size: 20),
           ),
           suffixIcon: isPassword
               ? IconButton(
@@ -416,7 +420,7 @@ class _LoginScreenState extends State<LoginScreen>
                 )
               : null,
           filled: true,
-          fillColor: Colors.white,
+          fillColor: fillColor ?? Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,
@@ -427,7 +431,7 @@ class _LoginScreenState extends State<LoginScreen>
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: AppTheme.primaryColor, width: 2),
+            borderSide: BorderSide(color: Colors.orange, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
