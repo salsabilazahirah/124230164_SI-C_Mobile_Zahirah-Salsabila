@@ -449,15 +449,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ),
                     textAlign: TextAlign.justify,
                   ),
-
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
                 ],
               ),
             ),
